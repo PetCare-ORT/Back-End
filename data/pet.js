@@ -42,6 +42,8 @@ async function updatePet(pet) {
       name: pet.name,
       species: pet.species,
       race: pet.race,
+      birthDate: pet.birthDate,
+      gender: pet.gender,
     },
   };
 
