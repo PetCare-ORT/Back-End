@@ -6,7 +6,7 @@ const petSchema = Joi.object({
   species: Joi.string()
     .valid(...constants.SPECIES)
     .required(),
-  race: Joi.string().alphanum().min(2).max(50).required(),
+  race: Joi.string().alphanum().min(2).max(50).allow(""),
   birthDate: Joi.date().greater(constants.MIN_BIRTHDATE).required(),
   gender: Joi.string()
     .valid(...constants.GENRES)

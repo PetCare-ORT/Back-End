@@ -37,7 +37,7 @@ petsRouter.post("/", async (req, res) => {
     if (result.acknowledged) {
       res.send(messages.SUCCESSFULL_ADD(newPet.name));
     } else {
-      res.send(errors.REQUEST_ERROR);
+      res.status(500).send(errors.REQUEST_ERROR);
     }
   } catch (error) {
     res.status(400).send(error.message);
