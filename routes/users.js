@@ -6,14 +6,6 @@ import messages from "../lib/messages.js";
 
 const usersRouter = express.Router();
 
-usersRouter.use("/:id", (req, res, next) => {
-  if (!validator.isMongoId(req.params.id)) {
-    res.status(400).send(errors.INVALID_ID);
-  } else {
-    next();
-  }
-});
-
 usersRouter.post("/", async (req, res) => {
   try {
     const newUser = validateUser(req.body);
@@ -41,6 +33,10 @@ usersRouter.post("/login", async (req, res) => {
   } catch (error) {
     res.status(401).send(error.message);
   }
+});
+
+usersRouter.get("/asd", async (req, res) => {
+  res.send("coso");
 });
 
 export { usersRouter as usersRouter };
