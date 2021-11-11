@@ -7,6 +7,8 @@ import logger from "morgan";
 import { indexRouter } from "./routes/index.js";
 import { usersRouter } from "./routes/users.js";
 import { petsRouter } from "./routes/pets.js";
+import { calendarEntriesRouter } from ".routes/calendarEntries.js"
+import { remindersRouter } from ".routes/reminders.js"
 
 const app = express();
 
@@ -23,6 +25,8 @@ app.use(cookieParser());
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/pets", petsRouter);
+app.use("/api/calendarEntries", calendarEntriesRouter);
+app.use("/api/reminders", remindersRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

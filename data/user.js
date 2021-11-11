@@ -2,9 +2,8 @@ import { getConnection } from "./connection.js";
 import Jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import errors from "../lib/errors.js";
+import { DATABASE, USERS_COLLECTION } from "../lib/constants.js";
 
-const USERS_COLLECTION = "Users";
-const DATABASE = "TP";
 
 async function addUser(user) {
   const connectiondb = await getConnection();
