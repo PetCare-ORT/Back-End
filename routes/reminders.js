@@ -1,10 +1,9 @@
 import * as reminderData from "../data/reminder.js";
 import validator from "validator";
 import express from "express";
-import { validateReminder } from "../schemas/reminderSchema";
+import { validateReminder } from "../schemas/reminderSchema.js";
 import errors from "../lib/errors.js";
 import messages from "../lib/messages.js";
-
 
 const remindersRouter = express.Router();
 
