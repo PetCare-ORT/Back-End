@@ -3,8 +3,8 @@ import Joi from "joi";
 const calendarEntrySchema = Joi.object({
   name: Joi.string().alphanum().min(2).max(15).required(),
   description: Joi.string().alphanum().min(2).max(50).required(),
-  date: Joi.date().greater(time.now()).required(),
-  //PET MAYBE?? 
+  date: Joi.date().greater(Date.now()).required(),
+  //PET MAYBE??
 });
 
 function validateCalendarEntry(calendarEntry) {

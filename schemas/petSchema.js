@@ -1,4 +1,5 @@
 import Joi from "joi";
+import joid from "joi-oid";
 import constants from "../lib/constants.js";
 
 const petSchema = Joi.object({
@@ -11,6 +12,7 @@ const petSchema = Joi.object({
   gender: Joi.string()
     .valid(...constants.GENRES)
     .required(),
+  userId: joid.objectId().required(),
 });
 
 function validatePet(pet) {
