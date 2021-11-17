@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 const reminderSchema = Joi.object({
-  name: Joi.string().alphanum().min(2).max(15).required(),
+  name: Joi.string().min(2).max(15).required(),
   alarmDate: Joi.date().greater(Date.now()).required(),
 });
 

@@ -12,7 +12,6 @@ const petSchema = Joi.object({
   gender: Joi.string()
     .valid(...constants.GENRES)
     .required(),
-  userId: joid.objectId().required(),
 });
 
 function validatePet(pet) {
