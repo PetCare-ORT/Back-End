@@ -6,7 +6,7 @@ import messages from "../lib/messages.js";
 
 const usersRouter = express.Router();
 
-usersRouter.post("/", async (req, res) => {
+usersRouter.post("/register", async (req, res) => {
   try {
     const newUser = validateUser(req.body);
     const result = await userData.addUser(newUser);
@@ -29,14 +29,10 @@ usersRouter.post("/login", async (req, res) => {
 
     const token = await userData.generatedAuthToken(user);
 
-    res.send({ user, token });
+    res.send({ token });
   } catch (error) {
     res.status(401).send(error.message);
   }
-});
-
-usersRouter.get("/asd", async (req, res) => {
-  res.send("coso");
 });
 
 export { usersRouter as usersRouter };

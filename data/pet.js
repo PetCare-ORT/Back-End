@@ -2,12 +2,13 @@ import { ObjectId } from "bson";
 import { getConnection } from "./connection.js";
 import Constants from "../lib/constants.js";
 
-async function getUserPets() {
+async function getUserPets(userId) {
   const clientMongo = await getConnection();
+  const query = { userId: userId };
   const pets = clientMongo
     .db(Constants.DATABASE)
     .collection(Constants.PETS_COLLECTION)
-    .find()
+    .find(query)
     .toArray();
   return pets;
 }
@@ -63,4 +64,4 @@ async function deletePet(id) {
   return result;
 }
 
-export { getUserPets as getPets, getPet, addPet, updatePet, deletePet };
+export { getUserPets, getPet, addPet, updatePet, deletePet };
