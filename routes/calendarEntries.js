@@ -4,6 +4,8 @@ import express from "express";
 import { validateCalendarEntry } from "../schemas/calendarSchema.js";
 import errors from "../lib/errors.js";
 import messages from "../lib/messages.js";
+import auth from "../middleware/auth.js";
+import jwtDecode from "jwt-decode";
 
 
 const calendarEntriesRouter = express.Router();
@@ -16,8 +18,10 @@ calendarEntriesRouter.use("/:id", (req, res, next) => {
   }
 });
 
-calendarEntriesRouter.get("/", async (req, res) => {
-  const entries = await calendarData.getCalendarEntries();
+calendarEntriesRouter.get("/",auth, async (req, res) => {
+  const jwtInfo = jwtDecode(req.header("Token"));
+  const userId = jwtInfo._id;
+  const entries = await calendarData.getCalendarEntries(userId);
   res.json(entries);
 });
 
@@ -31,7 +35,7 @@ calendarEntriesRouter.get("/:id", async (req, res) => {
   }
 });
 
-calendarEntriesRouter.post("/", async (req, res) => {
+calendarEntriesRouter.post("/",auth, async (req, res) => {
   try {
     const newCalendarEntry = validateCalendarEntry(req.body);
     const result = await calendarData.addCalendarEntry(newCalendarEntry);
@@ -45,7 +49,7 @@ calendarEntriesRouter.post("/", async (req, res) => {
   }
 });
 
-calendarEntriesRouter.put("/:id", async (req, res) => {
+calendarEntriesRouter.put("/:id",auth, async (req, res) => {
   try {
     const calendarEntrytoUpdate = validateCalendarEntry(req.body);
     calendarEntrytoUpdate._id = req.params.id;
@@ -61,7 +65,7 @@ calendarEntriesRouter.put("/:id", async (req, res) => {
   }
 });
 
-calendarEntriesRouter.delete("/:id", async (req, res) => {
+calendarEntriesRouter.delete("/:id",auth, async (req, res) => {
   const id = req.params.id;
   const result = await calendarData.deleteCalendarEntry(id);
   if (result.deletedCount != 1) {

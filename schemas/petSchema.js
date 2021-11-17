@@ -1,5 +1,4 @@
 import Joi from "joi";
-import joid from "joi-oid";
 import constants from "../lib/constants.js";
 
 const petSchema = Joi.object({

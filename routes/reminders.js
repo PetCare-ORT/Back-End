@@ -4,6 +4,8 @@ import express from "express";
 import { validateReminder } from "../schemas/reminderSchema.js";
 import errors from "../lib/errors.js";
 import messages from "../lib/messages.js";
+import auth from "../middleware/auth.js";
+import jwtDecode from "jwt-decode";
 
 const remindersRouter = express.Router();
 
@@ -15,12 +17,14 @@ remindersRouter.use("/:id", (req, res, next) => {
   }
 });
 
-remindersRouter.get("/", async (req, res) => {
-  const entries = await reminderData.getReminders();
+remindersRouter.get("/",auth, async (req, res) => {
+  const jwtInfo = jwtDecode(req.header("Token"));
+  const userId = jwtInfo._id;
+  const entries = await reminderData.getReminders(userId);
   res.json(entries);
 });
 
-remindersRouter.get("/:id", async (req, res) => {
+remindersRouter.get("/:id",auth, async (req, res) => {
   const id = req.params.id;
   const entry = await reminderData.getReminder(id);
   if (entry == null) {
@@ -30,9 +34,12 @@ remindersRouter.get("/:id", async (req, res) => {
   }
 });
 
-remindersRouter.post("/", async (req, res) => {
+remindersRouter.post("/",auth,async (req, res) => {
   try {
+    const jwtInfo = jwtDecode(req.header("Token"));
+    const userId = jwtInfo._id;
     const newReminder = validateReminder(req.body);
+    newReminder.userId = userId;
     const result = await reminderData.addReminder(newReminder);
     if (result.acknowledged) {
       res.send(messages.SUCCESSFULL_ADD(newReminder.name));
@@ -44,7 +51,7 @@ remindersRouter.post("/", async (req, res) => {
   }
 });
 
-remindersRouter.put("/:id", async (req, res) => {
+remindersRouter.put("/:id",auth, async (req, res) => {
   try {
     const remindertoUpdate = validateReminder(req.body);
     remindertoUpdate._id = req.params.id;
@@ -60,7 +67,7 @@ remindersRouter.put("/:id", async (req, res) => {
   }
 });
 
-remindersRouter.delete("/:id", async (req, res) => {
+remindersRouter.delete("/:id",auth, async (req, res) => {
   const id = req.params.id;
   const result = await reminderData.deleteReminder(id);
   if (result.deletedCount != 1) {
