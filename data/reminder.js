@@ -2,12 +2,13 @@ import { ObjectId } from "bson";
 import { getConnection } from "./connection.js";
 import Constants from "../lib/constants.js";
 
-async function getReminders() {
+async function getReminders(userId) {
   const clientMongo = await getConnection();
+  const query = { userId: userId };
   const reminders = clientMongo
     .db(Constants.DATABASE)
     .collection(Constants.REMINDERS_COLLECTION)
-    .find()
+    .find(query)
     .toArray();
   return reminders;
 }
@@ -33,7 +34,7 @@ async function addReminder(reminder) {
 
 async function updateReminder(reminder) {
   const clientMongo = await getConnection();
-  const updateQuery = { _id: new ObjectId(pet._id) };
+  const updateQuery = { _id: new ObjectId(reminder._id) };
 
   const newValues = {
     $set: {
