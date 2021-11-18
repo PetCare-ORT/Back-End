@@ -34,7 +34,7 @@ async function addReminder(reminder) {
 
 async function updateReminder(reminder) {
   const clientMongo = await getConnection();
-  const updateQuery = { _id: new ObjectId(pet._id) };
+  const updateQuery = { _id: new ObjectId(reminder._id) };
 
   const newValues = {
     $set: {
