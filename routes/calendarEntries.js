@@ -37,7 +37,10 @@ calendarEntriesRouter.get("/:id", async (req, res) => {
 
 calendarEntriesRouter.post("/",auth, async (req, res) => {
   try {
+    const jwtInfo = jwtDecode(req.header("Token"));
+    const userId = jwtInfo._id;
     const newCalendarEntry = validateCalendarEntry(req.body);
+    newCalendarEntry.userId = userId;
     const result = await calendarData.addCalendarEntry(newCalendarEntry);
     if (result.acknowledged) {
       res.send(messages.SUCCESSFULL_ADD(newCalendarEntry.name));
