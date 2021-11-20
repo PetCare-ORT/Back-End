@@ -2,12 +2,13 @@ import { ObjectId } from "bson";
 import { getConnection } from "./connection.js";
 import Constants from "../lib/constants.js";
 
-async function getDiaryEntries() {
+async function getDiaryEntries(userId) {
   const clientMongo = await getConnection();
+  const findOneQuery = { _id: new ObjectId(userId) };
   const entries = clientMongo
     .db(Constants.DATABASE)
     .collection(Constants.DIARY_ENTRIES_COLLECTION)
-    .find()
+    .find(findOneQuery)
     .toArray();
   return entries;
 }
