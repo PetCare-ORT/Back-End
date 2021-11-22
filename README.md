@@ -64,7 +64,7 @@
  ```
 {
     "name": "Dar de comer",
-    "alarmDate": "22:54:00"
+    "alarmDate": "11/22/2021 22:00:00"
 }
 ```
 ### Diary Entries
