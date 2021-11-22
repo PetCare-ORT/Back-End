@@ -44,7 +44,7 @@ diaryEntriesRouter.post("/", auth, async (req, res) => {
     newEntry.userId = userId;
     const result = await diaryData.addDiaryEntry(newEntry);
     if (result.acknowledged) {
-      res.send(messages.SUCCESSFULL_ADD(newEntry.name));
+      res.send(messages.SUCCESSFULL_ADD(newEntry.title));
     } else {
       res.status(500).send(errors.REQUEST_ERROR);
     }
@@ -53,16 +53,16 @@ diaryEntriesRouter.post("/", auth, async (req, res) => {
   }
 });
 
-petsRouter.put("/:id", auth, async (req, res) => {
+diaryEntriesRouter.put("/:id", auth, async (req, res) => {
   try {
     const updateEntry = validateDiaryEntry(req.body);
     updateEntry._id = req.params.id;
     const result = await diaryData.updateDiaryEntry(updateEntry);
     console.log(result);
     if (result.matchedCount != 1) {
-      res.status(404).send(errors.PET_NOT_FOUND);
+      res.status(404).send(errors.DIARY_ENTRY_NOT_FOUND);
     } else {
-      res.send(messages.SUCCESSFULL_UPDATE(petToUpdate.name));
+      res.send(messages.SUCCESSFULL_UPDATE(updateEntry.title));
     }
   } catch (error) {
     res.status(400).send(error.message);

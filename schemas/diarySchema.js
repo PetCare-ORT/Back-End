@@ -1,10 +1,10 @@
 import Joi from "joi";
 
 const diaryEntrySchema = Joi.object({
-  title: Joi.string().min(2).max(25).required(),
-  description: Joi.string().min(2).max(50).required(),
-  date: Joi.date().greater(Date.now()).required(),
-  attatchment: Joi.string().optional(),
+  title: Joi.string().min(2).required(),
+  description: Joi.string().min(2).required(),
+  date: Joi.date().required(),
+  attatchment: Joi.optional(),
 });
 
 function validateDiaryEntry(diaryEntry) {

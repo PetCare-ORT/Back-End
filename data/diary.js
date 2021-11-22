@@ -4,11 +4,11 @@ import Constants from "../lib/constants.js";
 
 async function getDiaryEntries(userId) {
   const clientMongo = await getConnection();
-  const findOneQuery = { _id: new ObjectId(userId) };
+  const findQuery = { userId: userId };
   const entries = clientMongo
     .db(Constants.DATABASE)
     .collection(Constants.DIARY_ENTRIES_COLLECTION)
-    .find(findOneQuery)
+    .find(findQuery)
     .toArray();
   return entries;
 }
@@ -38,7 +38,7 @@ async function updateDiaryEntry(diaryEntry) {
 
   const newValues = {
     $set: {
-      name: diaryEntry.name,
+      title: diaryEntry.title,
       description: diaryEntry.description,
       date: diaryEntry.date,
     },
