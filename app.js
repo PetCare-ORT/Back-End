@@ -1,12 +1,16 @@
 import createError from "http-errors";
-import express from "express";
+import express, { application } from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+import cors from "cors";
 
 import { indexRouter } from "./routes/index.js";
 import { usersRouter } from "./routes/users.js";
 import { petsRouter } from "./routes/pets.js";
+import { calendarEntriesRouter } from "./routes/calendarEntries.js";
+import { remindersRouter } from "./routes/reminders.js";
+import { diaryEntriesRouter } from "./routes/diaryEntries.js";
 
 const app = express();
 
@@ -18,11 +22,15 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors());
 // app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/pets", petsRouter);
+app.use("/api/calendarEntries", calendarEntriesRouter);
+app.use("/api/reminders", remindersRouter);
+app.use("/api/diaryEntries", diaryEntriesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

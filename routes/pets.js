@@ -4,6 +4,8 @@ import express from "express";
 import { validatePet } from "../schemas/petSchema.js";
 import errors from "../lib/errors.js";
 import messages from "../lib/messages.js";
+import auth from "../middleware/auth.js";
+import jwtDecode from "jwt-decode";
 
 const petsRouter = express.Router();
 
@@ -15,12 +17,16 @@ petsRouter.use("/:id", (req, res, next) => {
   }
 });
 
-petsRouter.get("/", async (req, res) => {
-  const pets = await petData.getPets();
-  res.json(pets);
+petsRouter.get("/", auth, async (req, res) => {
+  try {
+    const jwtInfo = jwtDecode(req.header("Token"));
+    const userId = jwtInfo._id;
+    const pets = await petData.getUserPets(userId);
+    res.json(pets);
+  } catch (error) {}
 });
 
-petsRouter.get("/:id", async (req, res) => {
+petsRouter.get("/:id", auth, async (req, res) => {
   const id = req.params.id;
   const pet = await petData.getPet(id);
   if (pet == null) {
@@ -30,9 +36,12 @@ petsRouter.get("/:id", async (req, res) => {
   }
 });
 
-petsRouter.post("/", async (req, res) => {
+petsRouter.post("/", auth, async (req, res) => {
   try {
+    const jwtInfo = jwtDecode(req.header("Token"));
+    const userId = jwtInfo._id;
     const newPet = validatePet(req.body);
+    newPet.userId = userId;
     const result = await petData.addPet(newPet);
     if (result.acknowledged) {
       res.send(messages.SUCCESSFULL_ADD(newPet.name));
@@ -44,7 +53,7 @@ petsRouter.post("/", async (req, res) => {
   }
 });
 
-petsRouter.put("/:id", async (req, res) => {
+petsRouter.put("/:id", auth, async (req, res) => {
   try {
     const petToUpdate = validatePet(req.body);
     petToUpdate._id = req.params.id;
@@ -60,13 +69,13 @@ petsRouter.put("/:id", async (req, res) => {
   }
 });
 
-petsRouter.delete("/:id", async (req, res) => {
+petsRouter.delete("/:id", auth, async (req, res) => {
   const id = req.params.id;
   const result = await petData.deletePet(id);
   if (result.deletedCount != 1) {
     res.status(404).send(errors.PET_NOT_FOUND);
   } else {
-    res.send(messages.SUCCESSFULL_DELETE);
+    res.send(messages.SUCCESSFULLY_DELETED_PET);
   }
 });
 

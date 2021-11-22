@@ -1,15 +1,14 @@
 import { ObjectId } from "bson";
 import { getConnection } from "./connection.js";
+import Constants from "../lib/constants.js";
 
-const DB_TP = "TP";
-const PETS_COLLECTION = "Pets";
-
-async function getPets() {
+async function getUserPets(userId) {
   const clientMongo = await getConnection();
+  const query = { userId: userId };
   const pets = clientMongo
-    .db(DB_TP)
-    .collection(PETS_COLLECTION)
-    .find()
+    .db(Constants.DATABASE)
+    .collection(Constants.PETS_COLLECTION)
+    .find(query)
     .toArray();
   return pets;
 }
@@ -18,8 +17,8 @@ async function getPet(id) {
   const clientMongo = await getConnection();
   const findOneQuery = { _id: new ObjectId(id) };
   const pet = clientMongo
-    .db(DB_TP)
-    .collection(PETS_COLLECTION)
+    .db(Constants.DATABASE)
+    .collection(Constants.PETS_COLLECTION)
     .findOne(findOneQuery);
   return pet;
 }
@@ -27,8 +26,8 @@ async function getPet(id) {
 async function addPet(pet) {
   const clientMongo = await getConnection();
   const result = clientMongo
-    .db(DB_TP)
-    .collection(PETS_COLLECTION)
+    .db(Constants.DATABASE)
+    .collection(Constants.PETS_COLLECTION)
     .insertOne(pet);
   return result;
 }
@@ -48,8 +47,8 @@ async function updatePet(pet) {
   };
 
   const result = clientMongo
-    .db(DB_TP)
-    .collection(PETS_COLLECTION)
+    .db(Constants.DATABASE)
+    .collection(Constants.PETS_COLLECTION)
     .updateOne(updateQuery, newValues);
 
   return result;
@@ -59,10 +58,10 @@ async function deletePet(id) {
   const clientMongo = await getConnection();
   const deleteQuery = { _id: new ObjectId(id) };
   const result = clientMongo
-    .db(DB_TP)
-    .collection(PETS_COLLECTION)
+    .db(Constants.DATABASE)
+    .collection(Constants.PETS_COLLECTION)
     .deleteOne(deleteQuery);
   return result;
 }
 
-export { getPets, getPet, addPet, updatePet, deletePet };
+export { getUserPets, getPet, addPet, updatePet, deletePet };
