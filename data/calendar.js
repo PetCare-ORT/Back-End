@@ -2,12 +2,13 @@ import { ObjectId } from "bson";
 import { getConnection } from "./connection.js";
 import Constants from "../lib/constants.js";
 
-async function getCalendarEntries() {
+async function getCalendarEntries(userId) {
   const clientMongo = await getConnection();
+  const query = { userId: userId };
   const entries = clientMongo
     .db(Constants.DATABASE)
     .collection(Constants.CALENDAR_ENTRIES_COLLECTION)
-    .find()
+    .find(query)
     .toArray();
   return entries;
 }

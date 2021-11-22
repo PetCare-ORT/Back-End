@@ -75,7 +75,7 @@ petsRouter.delete("/:id", auth, async (req, res) => {
   if (result.deletedCount != 1) {
     res.status(404).send(errors.PET_NOT_FOUND);
   } else {
-    res.send(messages.SUCCESSFULL_DELETE);
+    res.send(messages.SUCCESSFULLY_DELETED_PET);
   }
 });
 
