@@ -2,7 +2,9 @@ import Joi from "joi";
 
 const reminderSchema = Joi.object({
   name: Joi.string().min(2).max(15).required(),
-  alarmDate: Joi.date().greater(Date.now()).required(),
+  alarmDate: Joi.date()
+    .greater(Date.now() - 24 * 60 * 60 * 1000)
+    .required(),
 });
 
 function validateReminder(reminder) {
